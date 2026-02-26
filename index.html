@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AptivSolve Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1e3a8a, #7c3aed);
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --card-border: rgba(148, 163, 184, 0.3);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-soft: rgba(129, 140, 248, 0.18);
+      --accent-strong: #4f46e5;
+      --danger: #f97373;
+      --success: #22c55e;
+      --revision-bg: #0f172a;
+      --revision-border: #fbbf24;
+      --input-bg: rgba(15, 23, 42, 0.85);
+      --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.65);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --transition-fast: 150ms ease-out;
+      --transition-med: 220ms ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-image: var(--bg-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      padding: 24px 16px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .app-card {
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.13), transparent 55%),
+                  var(--card-bg);
+      border-radius: 26px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-soft);
+      padding: 28px 24px 26px;
+      backdrop-filter: blur(24px);
+    }
+
+    @media (min-width: 768px) {
+      .app-card {
+        padding: 32px 32px 30px;
+      }
+    }
+
+    .app-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .app-header {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+      }
+    }
+
+    .title-block {
+      max-width: 620px;
+    }
+
+    .app-title {
+      font-size: 1.7rem;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @media (min-width: 768px) {
+      .app-title {
+        font-size: 2.15rem;
+      }
+    }
+
+    .app-title span.emoji {
+      font-size: 1.65rem;
+      filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.55));
+    }
+
+    .app-subtitle {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .app-subtitle strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .meta-note {
+      align-self: flex-start;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: var(--radius-pill);
+      padding: 6px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .meta-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+    }
+
+    .meta-note strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .meta-note span.secondary {
+      opacity: 0.8;
+    }
+
+    .layout-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: 22px;
+    }
+
+    @media (max-width: 900px) {
+      .layout-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 20px;
+      padding: 18px 16px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    @media (min-width: 768px) {
+      .panel {
+        padding: 18px 18px 20px;
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+    }
+
+    .inputs-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field-label span.label-main {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .field-label span.helper {
+      opacity: 0.8;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--accent);
+    }
+
+    .input-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .text-input,
+    .select-input {
+      width: 100%;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: var(--input-bg);
+      color: var(--text-main);
+      padding: 9px 13px 9px 44px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+      appearance: none;
+    }
+
+    .select-input {
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    .select-chevron {
+      position: absolute;
+      right: 14px;
+      pointer-events: none;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .text-input::placeholder {
+      color: rgba(148, 163, 184, 0.8);
+    }
+
+    .text-input:focus,
+    .select-input:focus {
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6), 0 0 0 8px rgba(129, 140, 248, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .inputs-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hint-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      opacity: 0.7;
+    }
+
+    .primary-btn {
+      position: relative;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background-image: linear-gradient(135deg, #4f46e5, #8b5cf6, #22c55e);
+      color: #f9fafb;
+      box-shadow: 0 14px 30px rgba(79, 70, 229, 0.55);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transform-origin: center;
+      transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1), filter var(--transition-med), background-position 260ms ease-out;
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+    }
+
+    .primary-btn span.icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+    }
+
+    .primary-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.22), transparent 55%);
+      opacity: 0;
+      transition: opacity var(--transition-med);
+      pointer-events: none;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(79, 70, 229, 0.7);
+      background-position: 100% 50%;
+      filter: saturate(1.1);
+    }
+
+    .primary-btn:hover::after {
+      opacity: 1;
+    }
+
+    .primary-btn:active {
+      transform: translateY(0) scale(0.99);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.8);
+      filter: saturate(1.2);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.7;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+      background-image: linear-gradient(135deg, #4b5563, #6b7280);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 0.75rem;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 3px 9px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .plan-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .plan-cards {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .plan-card {
+      border-radius: var(--radius-md);
+      padding: 10px 11px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .plan-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .plan-card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .plan-card-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .plan-card-body {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .badge-soft {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: var(--accent-soft);
+      color: #c7d2fe;
+      border: 1px solid rgba(129, 140, 248, 0.4);
+    }
+
+    .badge-soft.alt {
+      background: rgba(52, 211, 153, 0.14);
+      border-color: rgba(52, 211, 153, 0.5);
+      color: #a7f3d0;
+    }
+
+    .plan-card.revision {
+      background: var(--revision-bg);
+      border-color: var(--revision-border);
+      box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.65);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plan-card.revision::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), transparent 55%);
+      pointer-events: none;
+    }
+
+    .plan-card.revision .plan-card-title {
+      color: #fbbf24;
+    }
+
+    .plan-card.revision .plan-card-body {
+      color: #fef3c7;
+    }
+
+    .plan-card.revision .badge-soft {
+      background: rgba(234, 179, 8, 0.15);
+      color: #fef3c7;
+      border-color: rgba(250, 204, 21, 0.7);
+    }
+
+    .divider {
+      border: none;
+      height: 1px;
+      background: radial-gradient(circle at left, rgba(148, 163, 184, 0.6), transparent 60%);
+      opacity: 0.75;
+      margin: 8px 0 10px;
+    }
+
+    .questions-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .questions-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .questions-title span.count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .questions-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.7rem;
+    }
+
+    .questions-badge {
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-muted);
+    }
+
+    .questions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 480px;
+      overflow: hidden auto;
+      padding-right: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.6) transparent;
+    }
+
+    .questions-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .questions-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .questions-container::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.7);
+      border-radius: 999px;
+    }
+
+    .question-block {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 9px 10px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .question-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+    }
+
+    .question-type-pill {
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+    }
+
+    .question-type-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+    }
+
+    .question-type-pill.mcq span.dot {
+      background: #60a5fa;
+    }
+
+    .question-type-pill.short span.dot {
+      background: #a78bfa;
+    }
+
+    .question-type-pill.scenario span.dot {
+      background: #22c55e;
+    }
+
+    .question-type-pill.mini span.dot {
+      background: #f97316;
+    }
+
+    .question-index {
+      color: var(--text-muted);
+    }
+
+    .question-text {
+      font-size: 0.85rem;
+    }
+
+    .options-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+    }
+
+    .option-item input[type="radio"] {
+      accent-color: #a5b4fc;
+      cursor: pointer;
+    }
+
+    .option-label {
+      cursor: pointer;
+    }
+
+    .answer-textarea {
+      width: 100%;
+      min-height: 48px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      padding: 7px 9px;
+      font-size: 0.8rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    .answer-textarea::placeholder {
+      color: rgba(148, 163, 184, 0.8);
+    }
+
+    .answer-textarea:focus {
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6), 0 0 0 6px rgba(129, 140, 248, 0.2);
+    }
+
+    .answer-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .correct-answer {
+      font-size: 0.78rem;
+      margin-top: 4px;
+      border-radius: 8px;
+      padding: 6px 7px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .correct-answer strong {
+      color: #a7f3d0;
+    }
+
+    .correct-answer.mcq strong {
+      color: #bfdbfe;
+    }
+
+    .correct-answer.hidden {
+      display: none;
+    }
+
+    .mcq-result {
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .mcq-result.correct {
+      color: #bbf7d0;
+      border-color: rgba(34, 197, 94, 0.7);
+      background: rgba(22, 163, 74, 0.15);
+    }
+
+    .mcq-result.incorrect {
+      color: #fecaca;
+      border-color: rgba(220, 38, 38, 0.7);
+      background: rgba(153, 27, 27, 0.15);
+    }
+
+    .mcq-result .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+    }
+
+    .mcq-result.correct .dot {
+      background: #22c55e;
+    }
+
+    .mcq-result.incorrect .dot {
+      background: #ef4444;
+    }
+
+    .questions-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .questions-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .questions-footer-left span.highlight {
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    .questions-footer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-soft {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .fade-in {
+      animation: fadeInUp 420ms var(--transition-med);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pulse-dot {
+      position: relative;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .pulse-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(34, 197, 94, 0.7);
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(2.1);
+        opacity: 0;
+      }
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chip span {
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <main class="app-card">
+      <header class="app-header">
+        <div class="title-block">
+          <h1 class="app-title">
+            <span class="emoji">🧠</span>
+            AptivSolve Platform
+          </h1>
+          <p class="app-subtitle">
+            <strong>AI-assisted problem-solving practice</strong> for technical roles.
+            Generate focused MCQs, short questions, scenarios and a mini task tailored to your role and experience.
+          </p>
+          <div class="badge-row" aria-hidden="true">
+            <div class="badge">
+              <span class="dot"></span>
+              Smart practice plan
+            </div>
+            <div class="badge">
+              <span class="dot"></span>
+              Role &amp; experience aware
+            </div>
+            <div class="badge">
+              <span class="dot"></span>
+              Problem-solving focused
+            </div>
+          </div>
+        </div>
+        <div class="meta-note">
+          <span class="meta-dot"></span>
+          <span><strong>Note</strong>: Plan is auto-generated based on available questions</span>
+        </div>
+      </header>
+
+      <section class="layout-grid" aria-label="AptivSolve configuration and plan">
+        <section class="panel" aria-label="Setup">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Setup</span>
+              <span class="pulse-dot" aria-hidden="true"></span>
+            </div>
+            <div class="pill">Step 1 · Configure</div>
+          </div>
+
+          <div class="inputs-stack">
+            <div class="field-group">
+              <label class="field-label" for="roleInput">
+                <span class="label-main">Target roles</span>
+                <span class="helper">(comma separated)</span>
+              </label>
+              <div class="input-wrapper">
+                <div class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4.5 20.25a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <input
+                  id="roleInput"
+                  class="text-input"
+                  type="text"
+                  placeholder="e.g. Frontend, Backend, .NET, Python"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="experienceSelect">
+                <span class="label-main">Experience level</span>
+                <span class="helper">(pick closest match)</span>
+              </label>
+              <div class="input-wrapper">
+                <div class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M8.25 6.75h10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M8.25 12h10.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M8.25 17.25H12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M4.5 6.75h.008v.008H4.5zM4.5 12h.008v.008H4.5zM4.5 17.25h.008v.008H4.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <select id="experienceSelect" class="select-input">
+                  <option value="junior">0–2 years · Junior</option>
+                  <option value="mid">2–5 years · Mid-level</option>
+                  <option value="senior">5+ years · Senior</option>
+                </select>
+                <span class="select-chevron" aria-hidden="true">▾</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="inputs-footer">
+            <div class="hint">
+              <span class="hint-dot"></span>
+              10 MCQs, 3 short, 2 scenario, 1 mini task
+            </div>
+            <button id="generateBtn" class="primary-btn" type="button">
+              <span class="icon">✨</span>
+              <span>Generate study plan</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-label="Plan and questions">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Study plan</span>
+            </div>
+            <div class="pill">Step 2 · Practice</div>
+          </div>
+
+          <div id="planSection" class="fade-in" style="display: none;">
+            <div class="plan-cards" aria-live="polite">
+              <article class="plan-card">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>MCQ Sprint</span>
+                    <span class="badge-soft">10 questions</span>
+                  </div>
+                  <span class="plan-card-count" id="mcqCountLabel">10× quick checks</span>
+                </div>
+                <p class="plan-card-body">
+                  Warm up with fast multiple-choice questions to cover fundamentals and common traps for your selected roles.
+                </p>
+              </article>
+
+              <article class="plan-card">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>Deep Dive</span>
+                    <span class="badge-soft alt">3 short</span>
+                  </div>
+                  <span class="plan-card-count">Explain in your own words</span>
+                </div>
+                <p class="plan-card-body">
+                  Use the short questions to practice clear, concise explanations—just like you would in an interview.
+                </p>
+              </article>
+
+              <article class="plan-card">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>Scenarios &amp; Mini task</span>
+                    <span class="badge-soft">2 + 1</span>
+                  </div>
+                  <span class="plan-card-count">Apply to real situations</span>
+                </div>
+                <p class="plan-card-body">
+                  Walk through realistic scenarios and a small practical task to strengthen applied problem-solving skills.
+                </p>
+              </article>
+
+              <article class="plan-card revision">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>Revision spotlight</span>
+                    <span class="badge-soft">Highlighted</span>
+                  </div>
+                  <span class="plan-card-count">End strong</span>
+                </div>
+                <p class="plan-card-body">
+                  After submitting, review all answers in this highlighted section—focus especially on concepts you missed or hesitated on.
+                </p>
+              </article>
+            </div>
+
+            <hr class="divider" />
+
+            <div class="questions-header">
+              <div class="questions-title">
+                Practice questions
+                <span class="count">10 MCQ · 3 short · 2 scenario · 1 mini task</span>
+              </div>
+              <div class="questions-badges">
+                <span class="questions-badge">Answer first</span>
+                <span class="questions-badge">Then reveal solutions</span>
+              </div>
+            </div>
+
+            <div id="questionsContainer" class="questions-container" aria-live="polite"></div>
+
+            <div class="questions-footer">
+              <div class="questions-footer-left">
+                <span>
+                  Click <span class="highlight">Submit &amp; reveal answers</span> to see AI-generated solutions.
+                </span>
+              </div>
+              <div class="questions-footer-right">
+                <span class="pill-soft">
+                  MCQs are auto-marked · written answers show a suggested solution
+                </span>
+                <button id="submitBtn" class="primary-btn" type="button">
+                  <span class="icon">✅</span>
+                  <span>Submit &amp; reveal answers</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="placeholderState" class="fade-in" aria-live="polite">
+            <div class="plan-cards">
+              <article class="plan-card">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>Ready when you are</span>
+                  </div>
+                  <span class="badge-soft">Idle</span>
+                </div>
+                <p class="plan-card-body">
+                  Start by selecting your role and experience, then generate a personalized problem-solving session.
+                </p>
+              </article>
+              <article class="plan-card revision">
+                <div class="plan-card-header">
+                  <div class="plan-card-title">
+                    <span>Revision matters</span>
+                  </div>
+                  <span class="badge-soft">Highlighted</span>
+                </div>
+                <p class="plan-card-body">
+                  AptivSolve highlights revision as a dedicated step—so you always finish by reinforcing what you just learned.
+                </p>
+              </article>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+              <span class="chip">
+                Session ·
+                <span>10 MCQ · 3 short · 2 scenario · 1 mini task</span>
+              </span>
+              <span>
+                Configure your session on the left to begin.
+              </span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const generateBtn = document.getElementById("generateBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const roleInput = document.getElementById("roleInput");
+    const experienceSelect = document.getElementById("experienceSelect");
+    const planSection = document.getElementById("planSection");
+    const placeholderState = document.getElementById("placeholderState");
+    const questionsContainer = document.getElementById("questionsContainer");
+
+    const QUESTION_COUNTS = {
+      mcq: 10,
+      short: 3,
+      scenario: 2,
+      mini: 1
+    };
+
+    const questionBank = {
+      generic: {
+        mcq: [
+          {
+            question: "You inherit a legacy module with complex, nested conditionals and duplicated logic. What is the most effective first step to improve maintainability?",
+            options: [
+              "Rewrite the entire module from scratch",
+              "Add detailed comments above every conditional branch",
+              "Introduce small, well-named helper functions to reduce duplication",
+              "Increase code coverage to 100% before touching the code"
+            ],
+            answer: "Introduce small, well-named helper functions to reduce duplication"
+          },
+          {
+            question: "A teammate introduces a change that occasionally breaks production. There is no clear pattern yet. What is the best next step?",
+            options: [
+              "Immediately revert all recent changes and freeze deployments",
+              "Add logging/telemetry around suspicious areas to collect more data",
+              "Ask everyone to manually test all features after each deploy",
+              "Ignore it until a customer reports more details"
+            ],
+            answer: "Add logging/telemetry around suspicious areas to collect more data"
+          },
+          {
+            question: "You notice repeated bugs related to misunderstanding requirements. Which action best improves long-term outcomes?",
+            options: [
+              "Extend sprint length to give developers more time",
+              "Introduce a shared design/requirements review before implementation",
+              "Ask QA to add more manual test cases",
+              "Reduce the number of parallel projects"
+            ],
+            answer: "Introduce a shared design/requirements review before implementation"
+          },
+          {
+            question: "A service you own depends on another unstable service owned by a different team. How can you make your system more resilient?",
+            options: [
+              "Retry indefinitely until the other service responds",
+              "Fail fast without any retries",
+              "Implement timeouts, limited retries, and graceful fallbacks",
+              "Ask the other team to fix their service and do nothing else"
+            ],
+            answer: "Implement timeouts, limited retries, and graceful fallbacks"
+          },
+          {
+            question: "During debugging, which technique most reliably narrows down the root cause of a complex issue?",
+            options: [
+              "Randomly change code until the bug disappears",
+              "Use binary search over the code path and add targeted logs or breakpoints",
+              "Restart the application and hope it doesn’t reoccur",
+              "Ask a senior engineer to fix it for you"
+            ],
+            answer: "Use binary search over the code path and add targeted logs or breakpoints"
+          },
+          {
+            question: "You’re asked to estimate a task involving an unfamiliar library. What is the best approach?",
+            options: [
+              "Give a quick guess based on intuition",
+              "Refuse to give any estimate",
+              "Do a small spike/prototype to de-risk and then estimate",
+              "Double the time you think it will take"
+            ],
+            answer: "Do a small spike/prototype to de-risk and then estimate"
+          },
+          {
+            question: "A bug is reported but cannot be reproduced locally. What should you do first?",
+            options: [
+              "Close the bug as 'cannot reproduce'",
+              "Add structured logging and capture environment details when it happens",
+              "Ask the reporter to provide a video",
+              "Immediately roll back to the previous version"
+            ],
+            answer: "Add structured logging and capture environment details when it happens"
+          },
+          {
+            question: "Your team is frequently blocked waiting on long-running integration tests. What is the most impactful improvement?",
+            options: [
+              "Disable integration tests to speed up merges",
+              "Run fewer tests and rely on manual QA",
+              "Parallelize test execution and isolate slow suites",
+              "Run all tests only once a week"
+            ],
+            answer: "Parallelize test execution and isolate slow suites"
+          },
+          {
+            question: "Which metric best indicates that a refactor improved code health?",
+            options: [
+              "Lines of code decreased",
+              "Number of comments increased",
+              "Cyclomatic complexity and duplication decreased while tests stayed green",
+              "Build time increased"
+            ],
+            answer: "Cyclomatic complexity and duplication decreased while tests stayed green"
+          },
+          {
+            question: "When facing multiple possible solutions to a problem, what should guide your decision most?",
+            options: [
+              "What is newest or trendiest",
+              "What is easiest just for you personally",
+              "What best balances clarity, performance, and long-term maintainability",
+              "What results in the most lines of code"
+            ],
+            answer: "What best balances clarity, performance, and long-term maintainability"
+          }
+        ],
+        short: [
+          {
+            question: "Describe a structured approach you would use to debug an intermittent production issue that you cannot reproduce locally."
+          },
+          {
+            question: "How do you decide when to refactor existing code versus leaving it as-is? Mention at least two signals you look for."
+          },
+          {
+            question: "Explain how you break down a vague requirement into implementable tasks while reducing the risk of rework."
+          }
+        ],
+        scenario: [
+          {
+            question: "Your product owner wants to ship a feature quickly, but you see clear technical risks and missing edge cases. How would you handle this conversation and still move forward constructively?"
+          },
+          {
+            question: "You join a project where the codebase is unfamiliar and deadlines are tight. What steps do you take in the first few days to become productive without introducing risky changes?"
+          }
+        ],
+        mini: [
+          {
+            question: "Design a simple checklist you would follow before declaring a tricky bug as 'fixed' in a real-world system. Think about steps from reproducing the bug to validating it in production."
+          }
+        ]
+      },
+      frontend: {
+        mcq: [
+          {
+            question: "A large React component frequently re-renders and causes jank when typing. What is the most targeted first step?",
+            options: [
+              "Migrate the entire app to a different framework",
+              "Use memoization (React.memo/useMemo) and move heavy computations out of render",
+              "Increase the debounce time of all inputs to 2 seconds",
+              "Disable strict mode in development"
+            ],
+            answer: "Use memoization (React.memo/useMemo) and move heavy computations out of render"
+          },
+          {
+            question: "A page is slow on first load due to a large JS bundle. Which strategy directly targets this problem?",
+            options: [
+              "Increase server memory",
+              "Implement route-based code splitting and lazy loading",
+              "Add more CSS animations",
+              "Move all logic into a single file"
+            ],
+            answer: "Implement route-based code splitting and lazy loading"
+          }
+        ],
+        short: [
+          {
+            question: "How would you identify and fix a layout shift issue (CLS) on a critical landing page?"
+          }
+        ],
+        scenario: [
+          {
+            question: "Design a plan to progressively enhance a data-heavy dashboard so that it remains usable on low-end mobile devices."
+          }
+        ],
+        mini: [
+          {
+            question: "Draft a small step-by-step checklist for reviewing a complex pull request in a frontend codebase."
+          }
+        ]
+      },
+      backend: {
+        mcq: [
+          {
+            question: "Your API occasionally returns 500 errors under peak load. Which option is the best first investigation step?",
+            options: [
+              "Increase API timeout limits",
+              "Capture detailed logs and metrics (CPU, memory, latency, error rate) around peak periods",
+              "Disable all authentication temporarily",
+              "Switch the database engine immediately"
+            ],
+            answer: "Capture detailed logs and metrics (CPU, memory, latency, error rate) around peak periods"
+          }
+        ],
+        short: [
+          {
+            question: "Explain how you would approach designing a retry strategy for a backend service calling a flaky dependency."
+          }
+        ],
+        scenario: [
+          {
+            question: "A batch job that runs nightly has started missing SLAs. Describe how you would investigate and stabilize it."
+          }
+        ],
+        mini: [
+          {
+            question: "Outline a minimal incident response playbook for a backend outage affecting a critical endpoint."
+          }
+        ]
+      },
+      net: {
+        mcq: [
+          {
+            question: "In a .NET API, database calls are blocking the thread pool. What is the recommended approach?",
+            options: [
+              "Use async/await with truly asynchronous database calls",
+              "Increase thread pool size indefinitely",
+              "Use Thread.Sleep in long operations",
+              "Disable logging to free CPU"
+            ],
+            answer: "Use async/await with truly asynchronous database calls"
+          }
+        ],
+        short: [
+          {
+            question: "How would you structure a .NET solution to clearly separate domain, application, and infrastructure concerns?"
+          }
+        ],
+        scenario: [
+          {
+            question: "You need to migrate an old .NET Framework service to .NET 8 with minimal downtime. Describe your migration strategy."
+          }
+        ],
+        mini: [
+          {
+            question: "Draft a small plan to introduce automated tests into a legacy .NET codebase that currently has none."
+          }
+        ]
+      },
+      python: {
+        mcq: [
+          {
+            question: "A Python script processing large data files is running out of memory. What is the most effective change?",
+            options: [
+              "Switch from Python to another language immediately",
+              "Process data in streaming fashion using generators/iterators",
+              "Catch all exceptions and ignore them",
+              "Increase recursion depth"
+            ],
+            answer: "Process data in streaming fashion using generators/iterators"
+          }
+        ],
+        short: [
+          {
+            question: "Explain how you would structure a Python project to keep business logic, configuration, and I/O concerns separate."
+          }
+        ],
+        scenario: [
+          {
+            question: "A long-running Python ETL pipeline occasionally fails in the middle. Describe how you would add robustness and observability."
+          }
+        ],
+        mini: [
+          {
+            question: "Create a brief checklist for reviewing performance of a Python API endpoint."
+          }
+        ]
+      }
+    };
+
+    let currentQuestions = [];
+
+    function parseRoles(raw) {
+      if (!raw) return [];
+      return raw
+        .split(",")
+        .map((r) => r.trim().toLowerCase())
+        .filter(Boolean);
+    }
+
+    function pickRoleKey(roles) {
+      if (!roles.length) return "generic";
+      const map = {
+        "frontend": "frontend",
+        "front-end": "frontend",
+        "front end": "frontend",
+        "backend": "backend",
+        "back-end": "backend",
+        "back end": "backend",
+        ".net": "net",
+        "net": "net",
+        "c#": "net",
+        "python": "python"
+      };
+      for (const r of roles) {
+        if (map[r]) return map[r];
+      }
+      return "generic";
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function fillQuestionsForType(type, roleKey) {
+      const roleBank = (questionBank[roleKey] && questionBank[roleKey][type]) || [];
+      const genericBank = (questionBank.generic && questionBank.generic[type]) || [];
+
+      const combined = [...roleBank, ...genericBank];
+      const needed = QUESTION_COUNTS[type];
+      if (!combined.length) return [];
+
+      const chosen = shuffle(combined);
+      const result = [];
+      let idx = 0;
+      while (result.length < needed) {
+        result.push(chosen[idx % chosen.length]);
+        idx++;
+      }
+      return result.slice(0, needed);
+    }
+
+    function generateQuestions(roleKey, experience) {
+      const mcqs = fillQuestionsForType("mcq", roleKey);
+      const shorts = fillQuestionsForType("short", roleKey);
+      const scenarios = fillQuestionsForType("scenario", roleKey);
+      const minis = fillQuestionsForType("mini", roleKey);
+
+      let idCounter = 1;
+      const wrap = (items, type) =>
+        items.map((q) => ({
+          id: idCounter++,
+          type,
+          question: q.question,
+          options: q.options || null,
+          answer: q.answer || null,
+          experience
+        }));
+
+      return [
+        ...wrap(mcqs, "mcq"),
+        ...wrap(shorts, "short"),
+        ...wrap(scenarios, "scenario"),
+        ...wrap(minis, "mini")
+      ];
+    }
+
+    function renderQuestions(questions) {
+      questionsContainer.innerHTML = "";
+
+      questions.forEach((q, index) => {
+        const block = document.createElement("article");
+        block.className = "question-block";
+        block.dataset.questionId = String(q.id);
+        block.dataset.type = q.type;
+
+        const topRow = document.createElement("div");
+        topRow.className = "question-top-row";
+
+        const typePill = document.createElement("div");
+        typePill.className = "question-type-pill " + q.type;
+        typePill.innerHTML = `
+          <span class="dot"></span>
+          <span>${q.type === "mcq" ? "MCQ" : q.type === "short" ? "Short answer" : q.type === "scenario" ? "Scenario" : "Mini task"}</span>
+        `;
+
+        const indexSpan = document.createElement("span");
+        indexSpan.className = "question-index";
+        indexSpan.textContent = "#" + (index + 1);
+
+        topRow.appendChild(typePill);
+        topRow.appendChild(indexSpan);
+
+        const text = document.createElement("p");
+        text.className = "question-text";
+        text.textContent = q.question;
+
+        block.appendChild(topRow);
+        block.appendChild(text);
+
+        if (q.type === "mcq" && Array.isArray(q.options)) {
+          const list = document.createElement("ul");
+          list.className = "options-list";
+          const name = "q_" + q.id;
+
+          q.options.forEach((opt, optIndex) => {
+            const li = document.createElement("li");
+            li.className = "option-item";
+
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = name;
+            input.value = opt;
+            input.id = name + "_opt_" + optIndex;
+
+            const label = document.createElement("label");
+            label.className = "option-label";
+            label.setAttribute("for", input.id);
+            label.textContent = opt;
+
+            li.appendChild(input);
+            li.appendChild(label);
+            list.appendChild(li);
+          });
+
+          block.appendChild(list);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.className = "answer-textarea";
+          textarea.placeholder = q.type === "short"
+            ? "Write your short answer here..."
+            : q.type === "scenario"
+            ? "Describe how you would approach this scenario..."
+            : "Outline your mini-task solution or steps here...";
+          textarea.dataset.questionId = String(q.id);
+
+          const meta = document.createElement("div");
+          meta.className = "answer-meta";
+          meta.innerHTML = `
+            <span>Write your answer in your own words before revealing the model solution.</span>
+          `;
+
+          block.appendChild(textarea);
+          block.appendChild(meta);
+        }
+
+        const correctAnswer = document.createElement("div");
+        correctAnswer.className = "correct-answer hidden" + (q.type === "mcq" ? " mcq" : "");
+        correctAnswer.dataset.answerFor = String(q.id);
+
+        if (q.type === "mcq") {
+          correctAnswer.innerHTML = `
+            <strong>Correct option:</strong>
+            <span>${q.answer || "Provided in solution"}</span>
+          `;
+        } else {
+          correctAnswer.innerHTML = `
+            <strong>Suggested answer:</strong>
+            <span>${q.answer || "Reflect on clarity, structure, and trade-offs. A good answer should be specific, practical, and show how you think through the problem."}</span>
+          `;
+        }
+
+        block.appendChild(correctAnswer);
+        questionsContainer.appendChild(block);
+      });
+    }
+
+    function revealAnswers() {
+      const blocks = Array.from(questionsContainer.querySelectorAll(".question-block"));
+      blocks.forEach((block) => {
+        const qid = block.dataset.questionId;
+        const type = block.dataset.type;
+        const answerEl = block.querySelector('.correct-answer');
+        if (!qid || !type || !answerEl) return;
+
+        if (type === "mcq") {
+          const q = currentQuestions.find((x) => String(x.id) === qid);
+          if (!q) return;
+
+          const inputs = Array.from(block.querySelectorAll('input[type="radio"]'));
+          const selected = inputs.find((inp) => inp.checked);
+          const existingResult = block.querySelector(".mcq-result");
+          if (existingResult) existingResult.remove();
+
+          const result = document.createElement("div");
+          result.className = "mcq-result";
+
+          if (selected && selected.value === q.answer) {
+            result.classList.add("correct");
+            result.innerHTML = `<span class="dot"></span><span>Correct · Nice work</span>`;
+          } else if (selected) {
+            result.classList.add("incorrect");
+            result.innerHTML = `<span class="dot"></span><span>Incorrect · Compare with the correct option</span>`;
+          } else {
+            result.classList.add("incorrect");
+            result.innerHTML = `<span class="dot"></span><span>No option selected · Review the correct answer</span>`;
+          }
+
+          block.appendChild(result);
+        }
+
+        answerEl.classList.remove("hidden");
+      });
+    }
+
+    function handleGenerateClick() {
+      const rawRoles = roleInput.value;
+      const roles = parseRoles(rawRoles);
+      const experience = experienceSelect.value;
+      const roleKey = pickRoleKey(roles);
+
+      currentQuestions = generateQuestions(roleKey, experience);
+      renderQuestions(currentQuestions);
+
+      placeholderState.style.display = "none";
+      planSection.style.display = "block";
+
+      planSection.classList.remove("fade-in");
+      // force reflow
+      void planSection.offsetWidth;
+      planSection.classList.add("fade-in");
+    }
+
+    function handleSubmitClick() {
+      if (!currentQuestions.length) {
+        handleGenerateClick();
+      }
+      revealAnswers();
+    }
+
+    generateBtn.addEventListener("click", handleGenerateClick);
+    submitBtn.addEventListener("click", handleSubmitClick);
+  </script>
+</body>
+</html>
+
